@@ -1,0 +1,24 @@
+{
+  "pauli_labels": [
+    "II",
+    "IZ",
+    "ZI",
+    "ZZ",
+    "XX"
+  ],
+  "hamiltonian_coeffs": [
+    -1.0523732,
+    0.3979374,
+    -0.3979374,
+    -0.0112801,
+    0.1809312
+  ],
+  "n_samples": 2000,
+  "n_params": 8,
+  "shots": 10000,
+  "noise_backend": "FakeLimaV2",
+  "param_range": [
+    -5,
+    5
+  ]
+}
