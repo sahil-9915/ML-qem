@@ -18,7 +18,7 @@
   "shots": 10000,
   "noise_backend": "FakeLimaV2",
   "param_range": [
-    -5,
-    5
+    -3.14159,
+    3.14159
   ]
 }

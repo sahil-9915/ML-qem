@@ -11,16 +11,20 @@ Reproduces and extends Section C of:
 | Pauli terms            | 5              | 62              |
 | Features               | 13             | 33              |
 | Unmitigated MAE        | 0.0349         | 0.0406          |
-| ZNE MAE                | 0.0359 (worse) | 0.0419 (worse)  |
+| ZNE-Linear MAE         | 0.0360 (worse) | 0.0418 (worse)  |
+| ZNE-Quadratic MAE      | 0.0379 (worse) | 0.0439 (worse)  |
 | RF MAE                 | 0.0084 (4.2×)  | 0.0135 (3.0×)   |
-| MLP MAE                | 0.0092 (3.8×)  | 0.0147 (2.8×)   |
+| MLP MAE                | 0.0076 (4.6×)  | 0.0122 (3.3×)   |
 | Energy MAE (RF)        | 0.00461 Ha     | 0.00477 Ha      |
+| Energy MAE (MLP)       | 0.00402 Ha     | 0.00440 Ha      |
 
-**Findings:**
-- RF achieves chemical accuracy (1.4 mHa bias) on H₂ VQE with zero runtime overhead
-- RF outperforms ZNE on both molecules while requiring no extra circuits at runtime
-- RF outperforms MLP on both molecules: H₂ (4.2× vs 3.8×) and LiH (3.0× vs 2.8×), with the gap narrowing at larger system size
-- RF is more data-efficient, reaching near-optimal performance with 50 training circuits on LiH
+**Key Findings:**
+- MLP outperforms RF on both molecules when properly trained (1000–2000 epochs vs 300), with the difference confirmed by paired bootstrap test (p < 0.05)
+- RF achieves chemical accuracy on H₂ VQE (0.05 mHa bias, 4/5 runs within 1.6 mHa) but fails on LiH (149.96 mHa, worse than unmitigated)
+- MLP provides meaningful VQE improvement on LiH (66.73 mHa, 2.2× over unmitigated) through smoother corrections
+- Both ZNE configurations (linear and quadratic Richardson extrapolation) perform worse than unmitigated on both molecules
+- Feature ablation reveals symplectic encoding nearly halves MAE despite <0.05% impurity-based importance
+- MLP shows essentially zero overfitting (train-test ratio ≈1.0) vs RF's moderate overfitting (≈2.0–2.5×)
 
 ## Project Structure
 
@@ -29,10 +33,11 @@ ml-qem/
 ├── h2/                                 # H₂ molecule (2 qubits, FakeLimaV2)
 │   ├── generate_data.ipynb             # Generate (noisy, ideal) pairs
 │   ├── training_RF.ipynb               # Train Random Forest
-│   ├── training_MLP.ipynb              # Train MLP, compare with RF
-│   ├── vqe_optimization.ipynb          # VQE loop with RF correction
-│   ├── zne_comparison.ipynb            # ZNE baseline comparison
-│   ├── data_efficiency.ipynb           # Data efficiency & feature importance
+│   ├── training_MLP.ipynb              # Train MLP (1000 epochs)
+│   ├── h2_comprehensive_analysis.ipynb # Bootstrap CIs, ablation, residuals
+│   ├── vqe_optimization.ipynb          # VQE with ideal/noisy/RF/MLP
+│   ├── zne_comparison.ipynb            # ZNE baseline (linear + quadratic)
+│   ├── data_efficiency.ipynb           # Data efficiency (5 seeds) & feature importance
 │   ├── ideal_data.npy                  # Ideal expectation values (2000, 5)
 │   ├── noisy_data.npy                  # Noisy expectation values (2000, 5)
 │   ├── theta_samples.npy              # Parameter vectors (2000, 8)
@@ -40,9 +45,12 @@ ml-qem/
 │
 ├── lih/                                # LiH molecule (6 qubits, FakeJakartaV2)
 │   ├── lih_generate_data.ipynb         # Generate (noisy, ideal) pairs
-│   ├── lih_train_mlqem.ipynb           # Train RF and MLP
-│   ├── lih_zne_comparison.ipynb        # ZNE baseline comparison
-│   ├── lih_data_efficiency.ipynb       # Data efficiency & feature importance
+│   ├── lih_training_RF.ipynb           # Train Random Forest
+│   ├── lih_training_MLP.ipynb          # Train MLP (2000 epochs), compare with RF
+│   ├── lih_comprehensive_analysis.ipynb# Bootstrap CIs, ablation, residuals, significance test
+│   ├── lih_vqe_optimization.ipynb      # VQE with ideal/noisy/RF/MLP, 5-run multi-start
+│   ├── lih_zne_comparison.ipynb        # ZNE baseline (linear + quadratic)
+│   ├── lih_data_efficiency.ipynb       # Data efficiency (5 seeds) & feature importance
 │   ├── lih_ideal_data.npy             # Ideal expectation values (2000, 62)
 │   ├── lih_noisy_data.npy             # Noisy expectation values (2000, 62)
 │   ├── lih_theta_samples.npy          # Parameter vectors (2000, 24)
@@ -55,11 +63,13 @@ ml-qem/
 
 Each molecule follows the same pipeline:
 
-1. **generate_data** — Sample random θ, run circuits on noiseless and noisy simulators, collect paired expectation values
-2. **training_RF / training_MLP** — Train models using symplectic Pauli encoding with per-qubit noise features
-3. **zne_comparison** — Benchmark against digital Zero-Noise Extrapolation (gate folding, noise factors {1,3})
-4. **data_efficiency** — Learning curves and RF feature importance analysis
-5. **vqe_optimization** (H₂ only) — Full VQE loop with RF correction, demonstrating chemical accuracy
+1. **generate_data** — Sample 2000 random θ ∈ [-π, π], run circuits on noiseless and noisy simulators, collect paired expectation values
+2. **training_RF** — Train Random Forest (100 trees) using symplectic Pauli encoding with per-qubit noise features
+3. **training_MLP** — Train MLP (64 hidden units, early stopping) for 1000–2000 epochs, compare with RF
+4. **comprehensive_analysis** — Multi-seed MLP (5 seeds), bootstrap CIs, paired significance test, overfitting check, feature ablation, correction function visualisation, predicted vs ideal scatter, residual analysis
+5. **zne_comparison** — Benchmark against digital ZNE with linear {1,3} and quadratic {1,3,5} Richardson extrapolation
+6. **data_efficiency** — Learning curves with error bands (5 seeds, both models) and RF feature importance
+7. **vqe_optimization** — Full VQE loop (COBYLA) with ideal/noisy/RF-mitigated/MLP-mitigated cost functions, 20 evaluations at θ*, 5-run multi-start analysis
 
 ## Method
 
@@ -71,6 +81,18 @@ Following the paper's feature design (Fig. 7), each (circuit, observable) pair i
 | Symplectic encoding | x and z bits per qubit from the Pauli observable |
 | Gate counts | Number of CX and SX gates (circuit complexity proxy) |
 | Noise parameters | T1, T2, readout error per qubit, masked by observable support |
+
+## Extensions Beyond the Original Paper
+
+| Extension | Finding |
+|-----------|---------|
+| MLP with proper training | MLP significantly outperforms RF (p < 0.05) on both molecules |
+| Quadratic ZNE | Higher-order extrapolation performs even worse due to stronger variance amplification |
+| Feature ablation | Symplectic encoding is critical despite <0.05% impurity importance |
+| VQE with MLP correction | RF wins on H₂ (low bias), MLP wins on LiH (smooth corrections) |
+| Multi-run VQE (5 starts) | RF achieves chemical accuracy on H₂ (4/5), fails on LiH (worse than noisy) |
+| Bootstrap significance tests | Paired bootstrap CIs confirm MLP advantage on both molecules |
+| Multi-seed MLP (5 seeds) | MLP extremely stable: 0.0076 ± 0.0001 (H₂), 0.0122 ± 0.0001 (LiH) |
 
 ## Requirements
 
