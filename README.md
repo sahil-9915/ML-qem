@@ -33,8 +33,8 @@ ml-qem/
 ├── h2/                                 # H₂ molecule (2 qubits, FakeLimaV2)
 │   ├── generate_data.ipynb             # Generate (noisy, ideal) pairs
 │   ├── training_RF.ipynb               # Train Random Forest
-│   ├── training_MLP.ipynb              # Train MLP (1000 epochs)
-│   ├── h2_comprehensive_analysis.ipynb # Bootstrap CIs, ablation, residuals
+│   ├── training_MLP.ipynb              # Train MLP (1000 epochs), compare with RF
+│   ├── h2_comprehensive_analysis.ipynb # Bootstrap CIs, ablation, residuals, significance test
 │   ├── vqe_optimization.ipynb          # VQE with ideal/noisy/RF/MLP
 │   ├── zne_comparison.ipynb            # ZNE baseline (linear + quadratic)
 │   ├── data_efficiency.ipynb           # Data efficiency (5 seeds) & feature importance
@@ -86,7 +86,7 @@ Following the paper's feature design (Fig. 7), each (circuit, observable) pair i
 
 | Extension | Finding |
 |-----------|---------|
-| MLP with proper training | MLP significantly outperforms RF (p < 0.05) on both molecules |
+| MLP with proper training | MLP outperforms RF (p < 0.05) on both molecules |
 | Quadratic ZNE | Higher-order extrapolation performs even worse due to stronger variance amplification |
 | Feature ablation | Symplectic encoding is critical despite <0.05% impurity importance |
 | VQE with MLP correction | RF wins on H₂ (low bias), MLP wins on LiH (smooth corrections) |
