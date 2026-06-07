@@ -88,7 +88,7 @@ Following the paper's feature design (Fig. 7), each (circuit, observable) pair i
 |-----------|---------|
 | MLP with proper training | MLP outperforms RF (p < 0.05) on both molecules |
 | Quadratic ZNE | Higher-order extrapolation performs even worse due to stronger variance amplification |
-| Feature ablation | Symplectic encoding is critical despite <0.05% impurity importance |
+| Feature ablation | Symplectic encoding is critical despite <0.05% impurity importance on H₂ and <1% on LiH |
 | VQE with MLP correction | RF wins on H₂ (low bias), MLP wins on LiH (lower bias and better corrections) |
 | Multi-run VQE (5 starts) | RF achieves chemical accuracy on H₂ (4/5), fails on LiH (worse than noisy) |
 | Bootstrap significance tests | Paired bootstrap CIs confirm MLP advantage on both molecules |
