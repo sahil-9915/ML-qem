@@ -23,7 +23,7 @@ Reproduces and extends Section C of:
 - RF achieves chemical accuracy on H₂ VQE (0.05 mHa bias, 4/5 runs within 1.6 mHa) but fails on LiH (149.96 mHa, worse than unmitigated)
 - MLP provides meaningful VQE improvement on LiH (mean error 66.73 mHa vs 149.13 mHa unmitigated across 5 runs)
 - Both ZNE configurations (linear and quadratic Richardson extrapolation) perform worse than unmitigated on both molecules
-- Feature ablation reveals symplectic encoding reduces MAE by 35–48% despite <0.05% impurity-based importance
+- Feature ablation reveals symplectic encoding reduces MAE by 35–48% despite negligible impurity-based importance (<0.05% on H₂, <1% on LiH)
 - MLP shows essentially zero overfitting (train-test ratio ≈1.0) vs RF's moderate overfitting (≈2.0–2.5×)
 
 ## Project Structure
@@ -106,12 +106,17 @@ Note: `pyscf` and `qiskit-nature` are **not** required — the LiH Hamiltonian i
 ## Reference
 
 ```
-@article{liao2024mlqem,
-  title={Machine Learning for Practical Quantum Error Mitigation},
-  author={Liao, Haoran and Wang, Derek S. and Sitdikov, Iskandar and Salcedo, Ciro and Seif, Alireza and Minev, Zlatko K.},
-  journal={Nature Machine Intelligence},
-  volume={6},
-  pages={594--604},
-  year={2024}
-}
+@article{Liao_2024,
+   title={Machine learning for practical quantum error mitigation},
+   volume={6},
+   ISSN={2522-5839},
+   url={http://dx.doi.org/10.1038/s42256-024-00927-2},
+   DOI={10.1038/s42256-024-00927-2},
+   number={12},
+   journal={Nature Machine Intelligence},
+   publisher={Springer Science and Business Media LLC},
+   author={Liao, Haoran and Wang, Derek S. and Sitdikov, Iskandar and Salcedo, Ciro and Seif, Alireza and Minev, Zlatko K.},
+   year={2024},
+   month=Nov, pages={1478–1486} }
+
 ```
