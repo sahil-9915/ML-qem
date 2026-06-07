@@ -2,7 +2,7 @@
 
 Reproduces and extends Section C of:
 > Liao et al. *Machine Learning for Practical Quantum Error Mitigation*,
-> Nature Machine Intelligence 6, 594–604 (2024). [arXiv:2309.17368](https://arxiv.org/abs/2309.17368)
+> Nature Machine Intelligence 6, 1478–1486 (2024). [arXiv:2309.17368](https://arxiv.org/abs/2309.17368)
 
 ## Key Results
 
