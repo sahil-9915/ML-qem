@@ -21,7 +21,7 @@ Reproduces and extends Section C of:
 **Key Findings:**
 - MLP outperforms RF on both molecules when properly trained (1000–2000 epochs vs 300), with the difference confirmed by paired bootstrap test (p < 0.05)
 - RF achieves chemical accuracy on H₂ VQE (0.05 mHa bias, 4/5 runs within 1.6 mHa) but fails on LiH (149.96 mHa, worse than unmitigated)
-- MLP provides meaningful VQE improvement on LiH (66.73 mHa, 2.2× over unmitigated) with lower bias and better corrections
+- MLP provides meaningful VQE improvement on LiH (mean error 66.73 mHa vs 149.13 mHa unmitigated across 5 runs)
 - Both ZNE configurations (linear and quadratic Richardson extrapolation) perform worse than unmitigated on both molecules
 - Feature ablation reveals symplectic encoding reduces MAE by 35–48% despite <0.05% impurity-based importance
 - MLP shows essentially zero overfitting (train-test ratio ≈1.0) vs RF's moderate overfitting (≈2.0–2.5×)
