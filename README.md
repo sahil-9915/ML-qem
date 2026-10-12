@@ -29,34 +29,34 @@ Reproduces and extends Section C of:
 ## Project Structure
 
 ```
-ml-qem/
-├── h2/                                 # H₂ molecule (2 qubits, FakeLimaV2)
-│   ├── generate_data.ipynb             # Generate (noisy, ideal) pairs
-│   ├── training_RF.ipynb               # Train Random Forest
-│   ├── training_MLP.ipynb              # Train MLP (1000 epochs), compare with RF
-│   ├── h2_comprehensive_analysis.ipynb # Bootstrap CIs, ablation, residuals, significance test
-│   ├── vqe_optimization.ipynb          # VQE with ideal/noisy/RF/MLP, 5-run multi-start
-│   ├── zne_comparison.ipynb            # ZNE baseline (linear + quadratic)
-│   ├── data_efficiency.ipynb           # Data efficiency (5 seeds) & feature importance
-│   ├── ideal_data.npy                  # Ideal expectation values (2000, 5)
-│   ├── noisy_data.npy                  # Noisy expectation values (2000, 5)
-│   ├── theta_samples.npy              # Parameter vectors (2000, 8)
-│   └── dataset_meta.json              # Metadata
+ML-qem/
+├── H2/                                   # H₂ molecule (2 qubits, FakeLimaV2)
+│   ├── generate_data.ipynb               # Generate (noisy, ideal) pairs
+│   ├── training_RF.ipynb                 # Train Random Forest
+│   ├── training_MLP.ipynb                # Train MLP (1000 epochs), compare with RF
+│   ├── h2_comprehensive_analysis.ipynb   # Bootstrap CIs, ablation, residuals, significance test
+│   ├── vqe_optimization.ipynb            # VQE with ideal/noisy/RF/MLP, 5-run multi-start
+│   ├── zne_comparison.ipynb              # ZNE baseline (linear + quadratic)
+│   ├── data_efficiency.ipynb             # Data efficiency (5 seeds) & feature importance
+│   ├── ideal_data.npy                    # Ideal expectation values (2000, 5)
+│   ├── noisy_data.npy                    # Noisy expectation values (2000, 5)
+│   ├── theta_samples.npy                 # Parameter vectors (2000, 8)
+│   └── dataset_meta.json                 # Metadata
 │
-├── lih/                                # LiH molecule (6 qubits, FakeJakartaV2)
-│   ├── lih_generate_data.ipynb         # Generate (noisy, ideal) pairs
-│   ├── lih_training_RF.ipynb           # Train Random Forest
-│   ├── lih_training_MLP.ipynb          # Train MLP (2000 epochs), compare with RF
-│   ├── lih_comprehensive_analysis.ipynb# Bootstrap CIs, ablation, residuals, significance test
-│   ├── lih_vqe_optimization.ipynb      # VQE with ideal/noisy/RF/MLP, 5-run multi-start
-│   ├── lih_zne_comparison.ipynb        # ZNE baseline (linear + quadratic)
-│   ├── lih_data_efficiency.ipynb       # Data efficiency (5 seeds) & feature importance
-│   ├── lih_ideal_data.npy             # Ideal expectation values (2000, 62)
-│   ├── lih_noisy_data.npy             # Noisy expectation values (2000, 62)
-│   ├── lih_theta_samples.npy          # Parameter vectors (2000, 24)
-│   └── lih_meta.json                  # Metadata
+├── LiH/                                  # LiH molecule (6 qubits, FakeJakartaV2)
+│   ├── lih_generate_data.ipynb           # Generate (noisy, ideal) pairs
+│   ├── lih_training_RF.ipynb             # Train Random Forest
+│   ├── lih_training_MLP.ipynb            # Train MLP (2000 epochs), compare with RF
+│   ├── lih_comprehensive_analysis.ipynb  # Bootstrap CIs, ablation, residuals, significance test
+│   ├── lih_vqe_optimization.ipynb        # VQE with ideal/noisy/RF/MLP, 5-run multi-start
+│   ├── lih_zne_comparison.ipynb          # ZNE baseline (linear + quadratic)
+│   ├── lih_data_efficiency.ipynb         # Data efficiency (5 seeds) & feature importance
+│   ├── lih_ideal_data.npy                # Ideal expectation values (2000, 62)
+│   ├── lih_noisy_data.npy                # Noisy expectation values (2000, 62)
+│   ├── lih_theta_samples.npy             # Parameter vectors (2000, 24)
+│   └── lih_meta.json                     # Metadata
 │
-└── mlqem_report.pdf                    # Technical report
+└── mlqem_report.pdf                      # Technical report
 ```
 
 ## Pipeline
